@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -17,6 +16,74 @@ public static class Utility
     {
         canvasGroup.alpha = torf ? 1:0 ;
         canvasGroup.blocksRaycasts = torf;
+    }
+
+    /// <summary>
+    /// 起始會開LoadingUI
+    /// Done時會關閉
+    /// </summary>
+    /// <returns></returns>
+    public static Promise LoadingPromise()
+    {
+        return new Promise().Then(_ => {
+            UIManager.GetInstance().OpenDialog("LoadingUI");
+            return Answer.Resolve();
+        }).Done(()=> {
+            UIManager.GetInstance().CloseDialog("LoadingUI");
+        });
+    }
+
+    /// 比對兩筆資料並且把不相同的資料更新
+    /// Null會忽略不更新
+    /// EX: {a:1,b:2} UpdateData {a:null,b:4} =>{a:1,b:4} (忽略Null)
+    /// </summary>
+    /// <typeparam name="T">類別</typeparam>
+    /// <param name="self">被更新者</param>
+    /// <param name="target">比對者</param>
+    /// <param name="ignoreNull">不會更新Null值</param>
+    /// <returns></returns>
+    public static bool UpdateData<T>(this object self,object target,bool ignoreNull = true)
+    {
+        bool isUpdate = false;
+        var ls = typeof(T).GetFields();
+        foreach (var prop in ls)
+        {
+            var v = prop.GetValue(target);
+            var selfv = prop.GetValue(self);
+            if ((v != null|| ignoreNull ==false) && !v.Equals(selfv))
+            {
+                prop.SetValue(self, v);
+                isUpdate = true;
+            }
+        }
+        return isUpdate;
+    }
+
+    public static Answer ParseServerRespond<T>(string jsonStr)
+    {
+        HttpRespond<T> res = JsonConvert.DeserializeObject<HttpRespond<T>>(jsonStr);
+        if (res.result == "successful")
+        {
+            return Answer.Resolve(res.GetData());
+        }
+        else
+        {
+            return Answer.Reject(res.data.ToString());
+        }
+
+    }
+
+    [Serializable]
+    class HttpRespond<T>
+    {
+        public string result;
+        public object data;
+        public T GetData()
+        {
+            T d = default;
+            if(data!=null) d = JsonConvert.DeserializeObject<T>(data.ToString());
+            return d;
+        }
     }
 
     #region 存讀檔案

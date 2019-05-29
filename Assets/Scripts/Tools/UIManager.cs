@@ -13,8 +13,6 @@ public class UIManager : MonoBehaviour
     Dictionary<string, object> dialogPrefabs = new Dictionary<string, object>();
     List<UIDialog> dialogInstances = new List<UIDialog>();
     Canvas clearDepthCanvas;
-    GameObject worldUIGroup;
-    Camera uiCam;
     string path = "UIDialogs/";
     static public UIManager GetInstance()
     {
@@ -32,14 +30,6 @@ public class UIManager : MonoBehaviour
         clearDepthCanvas = GetComponent<Canvas>();
     }
 
-    /// <summary>
-    /// 開啟UIDialog
-    /// </summary>
-    /// <param name="name">開啟名稱</param>
-    /// <param name="owner"></param>
-    /// <param name="uiType">Render的時候是否需要有深度</param>
-    /// <param name="roteFunc">如果使用RenderUIType.WorldUI 需要設置面向的方法</param>
-    /// <returns></returns>
     public UIDialog OpenDialog(string name)
     {
         var dlg = LoadDialog(name);

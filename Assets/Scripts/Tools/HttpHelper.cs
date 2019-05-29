@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json;
 using System.Reflection;
+
 
 public class HttpHelper{
 
-    static string url = "https://rpg4hproject.firebaseio.com/";
+    static string url = "http://localhost:12121/";
     static Dictionary<string, string> defaultData = new Dictionary<string, string>();
 
     public static void SetDefaultData(string key, string value)
@@ -36,14 +36,15 @@ public class HttpHelper{
         return SetDefaultData(www);
     }
 
-    public static UnityWebRequest DoGet<T>(string router, T obj)
+
+    public static UnityWebRequest DoGet<T>(string router, T obj,bool useDefaultURL=true)
     {
-        return DoGet(router, ObjectConvertDictionary<T>(obj));
+        return DoGet(router, ObjectConvertDictionary<T>(obj), useDefaultURL);
     }
 
-    public static UnityWebRequest DoGet(string router, Dictionary<string, string> dict)
+    public static UnityWebRequest DoGet(string router, Dictionary<string, string> dict, bool useDefaultURL = true)
     {
-        string uri = SpliceUrl(router, dict);
+        string uri = SpliceUrl(router, dict, useDefaultURL);
         UnityWebRequest www = UnityWebRequest.Get(uri);
         return SetDefaultData(www);
     }
@@ -95,9 +96,9 @@ public class HttpHelper{
         return dix;
     }
 
-    static string SpliceUrl(string router,Dictionary<string, string> dict)
+    static string SpliceUrl(string router,Dictionary<string, string> dict,bool useDefaultURL =true)
     {
-        string uri = url + router;
+        string uri = useDefaultURL? url + router: router;
         if (dict != null&& dict.Count>0)
         {
             uri += "?";
@@ -109,4 +110,5 @@ public class HttpHelper{
         }
         return uri;
     }
+
 }

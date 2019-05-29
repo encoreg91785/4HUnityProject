@@ -83,10 +83,6 @@ public class Promise
     /// 最後一個Then的產出
     /// </summary>
     public object lastOut { private set; get; }
-    /// <summary>
-    /// UnityWebRequest 處理程式
-    /// </summary>
-    static public Func<UnityWebRequest, Answer> unityWebRequestParser { set; private get; }
     #endregion
 
     Queue<ProblemSolver> problemContainer = new Queue<ProblemSolver>();
@@ -326,10 +322,9 @@ public class Promise
                         yield return owner.StartCoroutine(result.yieldInstruction as IEnumerator);
                     }
                     else yield return (result.yieldInstruction as YieldInstruction);
-                    if( unityWebRequestParser!=null && result.dataDeliver is UnityWebRequest )
+                    if (result.dataDeliver is UnityWebRequest)
                     {
-                        //var www = (UnityWebRequest)result.dataDeliver;//好像沒用到
-                        result = unityWebRequestParser((UnityWebRequest) result.dataDeliver);
+                        result = UnityHttpParser((UnityWebRequest)result.dataDeliver);
                     }
                     lastOut = result.dataDeliver;
                 }
@@ -388,6 +383,19 @@ public class Promise
 
         promiseAllInstance.children = all;
         return promiseAllInstance;
+    }
+
+    Answer UnityHttpParser(UnityWebRequest res)
+    {
+        if (res.isHttpError==false)
+        {
+            return Answer.Resolve(res.downloadHandler.text);
+        }
+        else
+        {
+            return Answer.Resolve(res.error);
+        }
+            
     }
 }
 
