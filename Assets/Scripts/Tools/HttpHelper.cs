@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Reflection;
+using Newtonsoft.Json;
 
 
 public class HttpHelper{
@@ -42,7 +43,7 @@ public class HttpHelper{
         return DoGet(router, ObjectConvertDictionary<T>(obj), useDefaultURL);
     }
 
-    public static UnityWebRequest DoGet(string router, Dictionary<string, string> dict, bool useDefaultURL = true)
+    public static UnityWebRequest DoGet(string router, Dictionary<string, string> dict = null, bool useDefaultURL = true)
     {
         string uri = SpliceUrl(router, dict, useDefaultURL);
         UnityWebRequest www = UnityWebRequest.Get(uri);
@@ -91,7 +92,21 @@ public class HttpHelper{
 
         foreach (PropertyInfo info in infos)
         {
-            dix.Add(info.Name, info.GetValue(obj, null).ToString());
+            var v = info.GetValue(obj, null);
+            if (v is ICollection)
+            {
+                int i = 0;
+                foreach (var e in (ICollection)v)
+                {
+                    dix.Add(string.Format("{0}[{1}]", info.Name,i) , e.ToString());
+                    i++;
+                }
+            }
+            else
+            {
+                dix.Add(info.Name, v.ToString());
+            }
+            
         }
         return dix;
     }

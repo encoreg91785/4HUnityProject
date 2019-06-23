@@ -3,23 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using Newtonsoft.Json;
-using System;
 
 public class EditeUI : UIDialog
 {
     [SerializeField]
-    InputField rqcodeField, nameField;
+    InputField rqcodeField, nameField,teamField;
     [SerializeField]
     Button enterBtn;
     Player playerData;
     Player newData;
-    QRCodeUI ui;
     // Start is called before the first frame update
     void Start()
     {
-        newData = new Player();
-        enterBtn.interactable = false;
+        nameField.onEndEdit.AddListener(OnNameFieldEndEdit);
+        teamField.onEndEdit.AddListener(OnTeamFieldEndEdit);
+        ClearUI();
     }
 
     /// <summary>
@@ -28,8 +26,20 @@ public class EditeUI : UIDialog
     /// <param name="str"></param>
     void OnNameFieldEndEdit(string str)
     {
+        if (playerData == null) return;
         newData.name = nameField.text;
         CheckEnterEdite(newData.name != playerData.name);
+    }
+
+    // <summary>
+    /// 修改隊伍
+    /// </summary>
+    /// <param name="str"></param>
+    void OnTeamFieldEndEdit(string str)
+    {
+        if (playerData == null) return;
+        newData.team = teamField.text;
+        CheckEnterEdite(newData.team != playerData.team);
     }
 
     /// <summary>
@@ -54,13 +64,13 @@ public class EditeUI : UIDialog
     /// </summary>
     public void Return()
     {
-        UIManager.GetInstance().OpenDialog<QRCodeUI>("MainMenuUI");
+        UIManager.GetInstance().OpenDialog("MainMenuUI");
         UIManager.GetInstance().CloseDialog(this);
     }
 
     public void OpenQRCodeUI()
     {
-        ui = UIManager.GetInstance().OpenDialog<QRCodeUI>("QRCodeUI");
+        QRCodeUI ui = Main.GetInstance().OpenQRCodeUI();
         ui.resultAction = GetPlayerQRCode;
         ui.StartScan();
     }
@@ -69,6 +79,7 @@ public class EditeUI : UIDialog
     {
         rqcodeField.text = p.qrcode;
         nameField.text = p.name;
+        teamField.text = p.team;
     }
 
     void UpdatePlayerData()
@@ -90,11 +101,8 @@ public class EditeUI : UIDialog
 
     void GetPlayerQRCode(string qrcode)
     {
-        if (string.IsNullOrEmpty(qrcode) == false)
-        {
-            GetPlayerData(qrcode);
-            ui.StopScan();
-        }
+        GetPlayerData(qrcode);
+        Main.GetInstance().CloseUIQRCode();
     }
 
     /// <summary>
@@ -111,11 +119,19 @@ public class EditeUI : UIDialog
         }).Then(result => {
             playerData = result as Player;
             UpdateUI(playerData);
-            UIManager.GetInstance().CloseDialog("QRCodeUI");
             return Answer.Resolve();
         }).Reject(error => {
             Debug.Log(error);
         }).Invoke(this);
     }
 
+    public void ClearUI()
+    {
+        newData = new Player();
+        enterBtn.interactable = false;
+        playerData = null;
+        rqcodeField.text = "";
+        nameField.text = "";
+        teamField.text = "";
+    }
 }

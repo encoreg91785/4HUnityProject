@@ -387,13 +387,13 @@ public class Promise
 
     Answer UnityHttpParser(UnityWebRequest res)
     {
-        if (res.isHttpError==false)
+        if (res.isHttpError==false&& res.isNetworkError == false)
         {
             return Answer.Resolve(res.downloadHandler.text);
         }
         else
         {
-            return Answer.Resolve(res.error);
+            return Answer.Reject(res.error);
         }
             
     }

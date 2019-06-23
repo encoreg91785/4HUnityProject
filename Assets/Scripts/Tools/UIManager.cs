@@ -39,8 +39,8 @@ public class UIManager : MonoBehaviour
 
     public T OpenDialog<T>(string name) where T: UIDialog
     {
-        T dlg = (T)OpenDialog(name);
-        return dlg;
+        var ui = OpenDialog(name);
+        return ui==null?null: ui as T;
     }
 
     public UIDialog GetDialog(string name)
@@ -79,7 +79,7 @@ public class UIManager : MonoBehaviour
         if (dlg.transform.parent.gameObject != clearDepthCanvas.gameObject) Debug.LogWarning(dlg.gameObject.name + "is in clearDepthCanvas");
         else
         {
-            dlg.transform.SetAsFirstSibling();
+            dlg.transform.SetAsLastSibling();
         }
     }
 

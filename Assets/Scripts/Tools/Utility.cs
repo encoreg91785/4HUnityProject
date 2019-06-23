@@ -80,8 +80,11 @@ public static class Utility
         public object data;
         public T GetData()
         {
-            T d = default;
-            if(data!=null) d = JsonConvert.DeserializeObject<T>(data.ToString());
+            T d = default(T);
+            if (data != null)
+            {
+                d = JsonConvert.DeserializeObject<T>(data.ToString());
+            } 
             return d;
         }
     }
