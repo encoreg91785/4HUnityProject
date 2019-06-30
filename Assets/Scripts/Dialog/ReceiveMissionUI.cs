@@ -63,7 +63,7 @@ public class ReceiveMissionUI : UIDialog
             if (task != null)
             {
                 
-                UnityWebRequest www = HttpHelper.DoGet("taskDataAndcardData/count", new { taskqrcode = task.qrcode, cardid = task.cardid });
+                UnityWebRequest www = HttpHelper.DoGet("temp/taskAndcard/count", new { taskqrcode = task.qrcode, cardid = task.cardid });
                 return Answer.Resolve(www);
             }
             else
@@ -75,19 +75,20 @@ public class ReceiveMissionUI : UIDialog
             return Utility.ParseServerRespond<int[]>((string)result);
         }).Then(result => {
             var r = result as int[];
-            var card = Main.GetInstance().GetCardData(task.cardid);
-            if (task.max == -1 && card.max == -1)
+            if (CheckTaskCount(r[0]))
             {
+                taskName.text = task.name;
+                taskCondition.text = task.condition;
+                taskInformation.text = task.information;
+                confirmBtn.interactable = playerList.Count > 0;
+                scanPlayerBtn.interactable = true;
                 return Answer.Resolve();
             }
             else
             {
-                if (task.max < r[0] && card.max < r[1])
-                {
-
-                }
+                confirmBtn.interactable = false;
+                return Answer.Reject(string.Format("任務{0}/{1}", r[0], task.max));
             }
-            return Answer.Resolve();    
         }).Done(() => {
             UIManager.GetInstance().CloseDialog("LoadingUI");
         }).Reject(error => {
@@ -96,19 +97,6 @@ public class ReceiveMissionUI : UIDialog
             ui.SetUI(error,true);
             Debug.Log(error);
         }).Invoke(this);
-        task = Main.GetInstance().GetTaskData(qrcode);
-        if (task != null)
-        {
-            taskName.text = task.name;
-            taskCondition.text = task.condition;
-            taskInformation.text = task.information;
-            confirmBtn.interactable = playerList.Count > 0;
-            scanPlayerBtn.interactable = true;
-        }
-        else
-        {
-            confirmBtn.interactable = false;
-        }
     }
 
     public void CleanUI()
@@ -214,22 +202,76 @@ public class ReceiveMissionUI : UIDialog
 
     public void OnConfimTask()
     {
-        Utility.LoadingPromise().Then(_ => {
-            List<string> qrcode = new List<string>();
-            for (int i = 0; i < itemList.Count; i++)
-            {
-                if(itemList[i].IsSelect()) qrcode.Add(itemList[i].player.qrcode);
-            }
-            UnityWebRequest www = HttpHelper.DoPost("task", new { playerqrcode = qrcode, taskqrcode = task.qrcode });
+        
+        List<string> qrcode = new List<string>();
+        for (int i = 0; i < itemList.Count; i++)
+        {
+            if (itemList[i].IsSelect()) qrcode.Add(itemList[i].player.qrcode);
+        }
+        int[] tc =new int[0];
+        Utility.LoadingPromise().Then(result => {
+            UnityWebRequest www = HttpHelper.DoGet("temp/taskAndcard/count", new {cardid = task.cardid, taskqrcode = task.qrcode });
             return Answer.Resolve(www);
         }).Then(result => {
+            return Utility.ParseServerRespond<int[]>((string)result);
+        }).Then(result => {
+            tc = result as int[];
+            if (CheckTaskCount(tc[0]+ qrcode.Count))
+            {
+                UnityWebRequest www = HttpHelper.DoPost("task", new { playerqrcode = qrcode, taskqrcode = task.qrcode });
+                return Answer.Resolve(www);
+            }
+            else
+            {
+                return Answer.Reject(string.Format("({0}+{1})/{2}\n{3} 任務將超過可完成上限，請確認人數", tc[0],qrcode.Count,task.max,task.name));
+            }
+        }).Then(result => {
             return Utility.ParseServerRespond<object>((string)result);
+        }).Then(result => {
+            var carddata = Main.GetInstance().GetCardData(task.cardid);
+            if (!(carddata.max == 0 || carddata.max == -1))
+            {
+                if (carddata.max - tc[1] <= qrcode.Count)
+                {
+                    var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+                    var done = false;
+                    var isCancel = false;
+                    ui.SetUI("{0}/{1} 卡片取得上限將超過當前人數，\n部分人將無法取得卡片是否繼續?",false,()=> { done = true; },()=> { done = true; isCancel = true; });
+                    return Answer.PendingUntil(isCancel, () => { return done; });
+                }
+            }
+            return Answer.Resolve(true);
+        }).Then(result => {
+            if ((bool)result)
+            {
+                UnityWebRequest www = HttpHelper.DoPost("card", new { playerqrcode = qrcode, cardid = task.cardid, from = task.qrcode });
+                return Answer.Resolve(www);
+            }
+            else return Answer.Reject();     
         }).Then(result => {
             CleanUI();
             return Answer.Resolve();
         }).Reject(error => {
+            if (string.IsNullOrEmpty(error) == false)
+            {
+                var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+                ui.SetUI(error, true);
+            }
             Debug.Log(error);
         }).Invoke(this);
+    }
+
+    bool CheckTaskCount(int tc)
+    {
+        if (task.max == -1 || task.max == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return task.max >tc;
+        }
+        
     }
 }
 

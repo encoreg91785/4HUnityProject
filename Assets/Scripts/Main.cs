@@ -26,20 +26,55 @@ public class Main : MonoBehaviour
         instance = this;
     }
 
+    public class SocketData<T>
+    {
+        public string action;
+        public T data;
+    }
     void Start()
     {
+        //強連線
+        //SocketConnection.Instance.GetDataFunction = (s) =>
+        //{
+        //    var data = JsonConvert.DeserializeObject<SocketData<object>>(s);
+        //    Debug.Log(data);
+        //};
+
+        //SocketConnection.Instance.ConnectToTcpServer("61.230.66.173", 1337);
+        //new Promise().Then(_ =>
+        //{
+        //    var connect = SocketConnection.Instance;
+        //    return Answer.PendingUntil(() => { return connect.ConnectionIsAlive; });
+        //}).Then(_ =>
+        //{
+        //    SocketConnection.Instance.SentDataToServer(JsonConvert.SerializeObject(
+        //        new
+        //        {
+        //            action = "GetAllPoint",
+        //            data = new { id = 1, position = new int[] { 1, 2, 3 }, belong = "a" }
+        //        }));
+        //    return Answer.Resolve();
+        //}).Invoke(this);
+
+
+
         Application.targetFrameRate = 30;
         uiQRCode = UIManager.GetInstance().OpenDialog<QRCodeUI>("QRCodeUI");
         uiQRCode.OnHide();
-        Init().Then(_ =>
-        {
-            return Answer.Resolve();
+        Init().Then(_=> {
+            UnityWebRequest www = HttpHelper.DoGet("test");
+            return Answer.Resolve(www);
         }).Then(_ =>
         {
             UIManager.GetInstance().OpenDialog<MainMenuUI>("MainMenuUI");
             return Answer.Resolve();
         }).Invoke(this);
     }
+
+    //private void OnDestroy()
+    //{
+    //    SocketConnection.Instance.DisconnectToTcpServer();
+    //}
 
     public void CloseUIQRCode()
     {

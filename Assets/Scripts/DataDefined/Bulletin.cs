@@ -9,5 +9,5 @@ public class Bulletin
     public int id;
     public string message;
     public string type;
-    public DateTime create;
+    public DateTime? create;
 }
