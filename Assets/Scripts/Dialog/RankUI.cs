@@ -15,7 +15,11 @@ public class RankUI : UIDialog
     PlayerRank[] playerRankList = new PlayerRank[0];
     private void Start()
     {
-       
+        GetBulletinList();
+        GetPlayerRankList();
+        GetTeamRankList();
+        InvokeRepeating("GetBulletinList",20,20);
+        InvokeRepeating("GetTeamRankList", 90, 90);
     }
 
     void GetPlayerRankList()
@@ -47,7 +51,11 @@ public class RankUI : UIDialog
                 ls[i].Clear();
             } 
         }
-        if(isEnd) currentIndex=0;
+        if (isEnd)
+        {
+            currentIndex = 0;
+            Invoke("GetPlayerRankList", 10);
+        } 
         else currentIndex += 10;
     }
 
@@ -79,11 +87,11 @@ public class RankUI : UIDialog
 
     public void GetBulletinList()
     {
-        Utility.LoadingPromise().Then(_ => {
-            UnityWebRequest www = HttpHelper.DoGet("rank");
+        new Promise().Then(_ => {
+            UnityWebRequest www = HttpHelper.DoGet("bulletin");
             return Answer.Resolve(www);
         }).Then(result => {
-            return Utility.ParseServerRespond<List<RankData>>((string)result);
+            return Utility.ParseServerRespond<Bulletin[]>((string)result);
         }).Then(result => {
             var ls = (result as Bulletin[]);
             SetBulletinItem(ls);
@@ -107,5 +115,10 @@ public class RankUI : UIDialog
     {
         UIManager.GetInstance().OpenDialog<QRCodeUI>("MainMenuUI");
         UIManager.GetInstance().CloseDialog(this);
+    }
+
+    public void OnDestroy()
+    {
+        CancelInvoke();
     }
 }

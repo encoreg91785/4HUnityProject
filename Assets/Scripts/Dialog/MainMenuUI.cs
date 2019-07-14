@@ -42,4 +42,10 @@ public class MainMenuUI : UIDialog
             UIManager.GetInstance().OpenDialog("TransactionCardUI");
         });
     }
+
+    public void ClickGame()
+    {
+        UIManager.GetInstance().CloseDialog(this);
+        UIManager.GetInstance().OpenDialog("LevelBoardUI");
+    }
 }

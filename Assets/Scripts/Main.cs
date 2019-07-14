@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System;
+using System.Text.RegularExpressions;
 
 public class Main : MonoBehaviour
 {
     static Main instance = null;
+    public string ip = "localhost";
     Dictionary<string, CardData> cardDatas = new Dictionary<string, CardData>();
     Dictionary<string, TaskData> taskDatas = new Dictionary<string, TaskData>();
     QRCodeUI uiQRCode;
@@ -26,38 +28,13 @@ public class Main : MonoBehaviour
         instance = this;
     }
 
-    public class SocketData<T>
-    {
-        public string action;
-        public T data;
-    }
     void Start()
     {
-        //強連線
-        //SocketConnection.Instance.GetDataFunction = (s) =>
-        //{
-        //    var data = JsonConvert.DeserializeObject<SocketData<object>>(s);
-        //    Debug.Log(data);
-        //};
 
-        //SocketConnection.Instance.ConnectToTcpServer("61.230.66.173", 1337);
-        //new Promise().Then(_ =>
-        //{
-        //    var connect = SocketConnection.Instance;
-        //    return Answer.PendingUntil(() => { return connect.ConnectionIsAlive; });
-        //}).Then(_ =>
-        //{
-        //    SocketConnection.Instance.SentDataToServer(JsonConvert.SerializeObject(
-        //        new
-        //        {
-        //            action = "GetAllPoint",
-        //            data = new { id = 1, position = new int[] { 1, 2, 3 }, belong = "a" }
-        //        }));
-        //    return Answer.Resolve();
-        //}).Invoke(this);
-
-
-
+        var str = "{\"action\":\"UpdatePoint\",\"data\":{\"id\":21,\"position\":{\"x\":183.050781,\"y\":-102.508484,\"z\":0},\"belong\":\"隊伍2\"}}{\"action\":\"UpdatePoint\",\"data\":{\"id\":21,\"position\":{\"x\":183.050781,\"y\":-102.508484,\"z\":0},\"belong\":\"隊伍2\"}}";
+        //var ls = Regex.Split(str, @"/(\{.+?\})(?={|$)/g");
+        var ls = Regex.Split(str, "}{");
+        //var ls = Regex.Escape(str);
         Application.targetFrameRate = 30;
         uiQRCode = UIManager.GetInstance().OpenDialog<QRCodeUI>("QRCodeUI");
         uiQRCode.OnHide();
@@ -135,10 +112,10 @@ public class Main : MonoBehaviour
     Promise GetServerIp()
     {
         LoadingUI load = UIManager.GetInstance().OpenDialog<LoadingUI>("LoadingUI");
-        return new Promise().Done(() =>
-        {
-            UIManager.GetInstance().CloseDialog("LoadingUI");
-        });
+        //return new Promise().Done(() =>
+        //{
+        //    UIManager.GetInstance().CloseDialog("LoadingUI");
+        //});
         return new Promise().Then(_ =>
         {
             UnityWebRequest www = HttpHelper.DoGet("https://rpg4hproject.firebaseio.com/IP.json", null, false);
@@ -146,6 +123,7 @@ public class Main : MonoBehaviour
         }).Then(ip => {
             var d = JsonConvert.DeserializeObject<Dictionary<string, string>>((string)ip);
             HttpHelper.SetHostAndPort(d["ip"], 12121);
+            this.ip = d["ip"];
             return Answer.Resolve();
         }).Done(()=>{
             UIManager.GetInstance().CloseDialog("LoadingUI");

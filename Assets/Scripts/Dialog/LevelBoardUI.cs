@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelBoardUI : UIDialog
 {
     public GameObject levelUI = null;
-
+    Stack<Action> update = new Stack<Action>();
+    Stack<Action> send = new Stack<Action>();
     [SerializeField]
     Button editBtn, comfirmBtn, addBtn, deleteBtn;
 
@@ -20,10 +23,9 @@ public class LevelBoardUI : UIDialog
     private int idCounter = 0;
     private int idFocus;
 
-    private readonly string[] belongTeamName = { "隊伍1", "隊伍2", "隊伍3", "隊伍4" };
+    private readonly string[] belongTeamName = { "隊伍1", "隊伍2", "隊伍3", "隊伍4", "" };
 
     private Dictionary<int, Level> localLevels = new Dictionary<int, Level>();
-    private Queue<Level> dirtyLevels = new Queue<Level>();
 
     enum PageStatus
     {
@@ -31,46 +33,85 @@ public class LevelBoardUI : UIDialog
         Edit,
     }
     PageStatus curPageStatus = PageStatus.Idle;
-    
+
 
     private void Start()
     {
-        /*SocketConnection.Instance.GetDataFunction = (s) =>
+        //強連線
+        SocketConnection.Instance.GetDataFunction = (s) =>
         {
-            Debug.Log(s);
-        };
-        SocketConnection.Instance.ConnectToTcpServer("61.230.66.173", 1337);
-
-        SocketConnection.Instance.SentDataToServer(JsonConvert.SerializeObject(
-                new
+            var data = JsonConvert.DeserializeObject<SocketData>(s);
+            if (data != null)
+            {
+                switch (data.action)
                 {
-                    action = "GetAllPoint",
-                    data = new { id = 1, position = new int[] { 1, 2, 3 }, belong = "a" }
-                }));*/
+                    case "UpdatePoint":
+                        UpdateLevels(data.GetData<Level>());
+                        break;
+                    case "DeletePoint":
+                        DeletePoint(data.GetData<int>());
+                        break;
+                    case "AddPoint":
+                        GetPoint(data.GetData<Level>());
+                        break;
+                    case "GetAllPoint":
+                        GetAllPoint(data.GetData<List<Level>>());
+                        break;
+                    default:
+                        Debug.Log(data.action);
+                        break;
+                }
+            }
+                
+        };
+
+        SocketConnection.Instance.ConnectToTcpServer(Main.GetInstance().ip, 1337);
+        new Promise().Then(_ =>
+        {
+            var connect = SocketConnection.Instance;
+            return Answer.PendingUntil(() => { return connect.ConnectionIsAlive; });
+        }).Then(_ =>
+        {
+            SendToSocket("GetAllPoint", null);
+            return Answer.Resolve();
+        }).Invoke(this);
+    }
+
+    private void Update()
+    {
+        while (update.Count > 0)
+        {
+            update.Pop()();
+        }
+        if (send.Count > 0)
+        {
+            send.Pop()();
+        }
+        //while (send.Count > 0)
+        //{
+        //    send.Pop()();
+        //}
     }
 
     private void OnDestroy()
     {
-        //SocketConnection.Instance.DisconnectToTcpServer();
+        SocketConnection.Instance.DisconnectToTcpServer();
     }
 
     // 模擬Server回傳
-    List<Level> serverLevels = new List<Level>();
-    void Update()
+    void GetAllPoint(List<Level> ls)
     {
-        Dictionary<int, Level> newLocalLevels = new Dictionary<int, Level>();
-        foreach (var level in serverLevels)
+        update.Push(() =>
         {
-            newLocalLevels.Add(level.id, level);
-
-            // Render all LevelUIs except focus one
-            levelUIs.TryGetValue(level.id, out GameObject thisLevelUI);
-            if (idFocus != level.id)
+            foreach (var level in ls)
             {
+                localLevels[level.id] =level;
+                // Render all LevelUIs except focus one
+                GameObject thisLevelUI = null;
+                levelUIs.TryGetValue(level.id, out thisLevelUI);
                 RenderLevelUI(ref thisLevelUI, level.id, level.position, level.belong);
             }
-        }
-        localLevels = newLocalLevels;
+        });
     }
 
     // EditBtn Onclick()
@@ -81,19 +122,23 @@ public class LevelBoardUI : UIDialog
         {
             return;
         }
+        foreach (var item in levelUIs)
+        {
+            item.Value.GetComponent<LevelItem>().active = true;
+        }
         ChangePage(PageStatus.Edit);
     }
 
     // ComfirmBtn Onclick()
     public void Comfirm()
     {
-        UpdateDirtyLevels();
         ResetFocus();
         // Turn off LeveUI
         foreach (var levelUI in levelUIs)
         {
             LevelItem LeveUI = levelUI.Value.GetComponent<LevelItem>();
             LeveUI.active = false;
+            SendToSocket("UpdatePoint", LeveUI.level);
         }
         if (curPageStatus == PageStatus.Idle)
         {
@@ -107,13 +152,12 @@ public class LevelBoardUI : UIDialog
     {
         Level level = new Level
         {
-            id = ++idCounter,
+            id = 0,
             position = new Vector3(0, 0, 0),
             belong = belongTeamName[0]
         };
-        localLevels.Add(level.id, level);
+        SendToSocket("AddPoint", level);
         // 模擬Server指令 AddPoint
-        serverLevels.Add(level);
     }
 
     private void ResetFocus()
@@ -132,18 +176,14 @@ public class LevelBoardUI : UIDialog
         idFocus = id;
         // After changing
         bool valid = levelUIs.TryGetValue(idFocus, out levelUI);
-        if ( valid )
+        if (valid)
         {
             levelUI.GetComponent<LevelItem>().SetFocus(true);
         }
         EnableLevelSubPage(valid);
-
-        // Mark focus level dirty
-        if (localLevels.TryGetValue(idFocus, out Level drityLevel))
-        {
-            dirtyLevels.Enqueue(drityLevel);
-        }
     }
+
+    Color[] colorArray = new Color[5] { new Color(1, 0.3349057f, 0.3349057f), new Color(0.514151f, 0.7544931f, 1), new Color(0.6307352f,1, 0.5896226f), new Color(1, 0.9381177f, 0.2688679f), Color.white };
 
     // setLevelBtns Onclick()
     public void SetLevelBelong(int teamIndex)
@@ -151,27 +191,27 @@ public class LevelBoardUI : UIDialog
         if (localLevels.TryGetValue(idFocus, out Level drityLevel))
         {
             drityLevel.belong = belongTeamName[teamIndex];
+            var ui = levelUIs[drityLevel.id];
+            ui.GetComponent<Image>().color = colorArray[teamIndex];
         }
+    }
+
+    void GetPoint(Level l)
+    {
+        update.Push(() =>
+        {
+            localLevels[l.id] = l;
+            GameObject obj = null;
+            levelUIs.TryGetValue(l.id, out obj);
+            RenderLevelUI(ref obj, l.id, l.position, l.belong);
+        });
     }
 
     // deleteBtn OnClick()
     public void Delete()
     {
-        levelUIs.TryGetValue(idFocus, out GameObject levelUI);
-        levelUIs.Remove(idFocus);
-        Destroy(levelUI);
-
-        localLevels.Remove(idFocus);
-
+        SendToSocket("DeletePoint", idFocus);
         // 模擬Server指令 DeletePoint
-        for (int i = 0; i < serverLevels.Count; ++i)
-        {
-            if (serverLevels[i].id == idFocus)
-            {
-                serverLevels.RemoveAt(i);
-                break;
-            }
-        }
         ResetFocus();
     }
 
@@ -202,50 +242,63 @@ public class LevelBoardUI : UIDialog
         curPageStatus = pageStatus;
     }
 
+    void DeletePoint(int id)
+    {
+        update.Push(() =>
+        {
+            localLevels.Remove(id);
+            var obj = levelUIs[id];
+            if (levelUIs != null)
+            {
+                Destroy(obj);
+                levelUIs.Remove(id);
+            }
+        });
+    }
+
     void RenderLevelUI(ref GameObject instance, int id, Vector3 position, string belong)
     {
+        LevelItem LeveUI = null;
         if (instance == null)
         {
             instance = Instantiate(levelUI);
+            LeveUI = instance.GetComponent<LevelItem>();
+            LeveUI.SetFocus(false);
+            LeveUI.pointerDown = () => { Focus(id); };
+            LeveUI.level = localLevels[id];
         }
         Text text = instance.GetComponentInChildren<Text>();
         text.text = "關卡" + id;
         RectTransform rectTransform = instance.GetComponent<RectTransform>();
         rectTransform.transform.SetParent(transform);
-        rectTransform.localPosition = position;
+        rectTransform.position = position;
         rectTransform.localScale = Vector3.one;
         if (curPageStatus == PageStatus.Edit)
         {
-            LevelItem LeveUI = instance.GetComponent<LevelItem>();
             LeveUI.active = true;
-            LeveUI.pointerDown = () => { Focus(id); };
-            LeveUI.level = localLevels[id];
         }
-        Button btn = instance.GetComponent<Button>();
         int teamIndex = GetTeamIndexByName(belong);
         bool isTeamIndexVaild = teamIndex >= 0 && teamIndex < belongTeamName.Length;
         if (isTeamIndexVaild)
         {
-            btn.colors = LevelColorBlocks[teamIndex];
+            instance.GetComponent<Image>().color = colorArray[teamIndex];
         }
         levelUIs[id] = instance;
     }
 
-    void UpdateDirtyLevels()
+    void UpdateLevels(Level level)
     {
-        while (dirtyLevels.Count > 0)
+        update.Push(() =>
         {
-            Level level = dirtyLevels.Dequeue();
-            // 模擬Server指令 UpdatePoint
-            for (int i = 0; i < serverLevels.Count; ++i)
+            var l = localLevels[level.id];
+            if (l != null)
             {
-                if (level.id == serverLevels[i].id)
-                {
-                    serverLevels[i].position = level.position;
-                    serverLevels[i].belong = level.belong;
-                }
+                var obj = levelUIs[l.id];
+                l.position = level.position;
+                l.belong = level.belong;
+                RenderLevelUI(ref obj, l.id, l.position, l.belong);
             }
-        }
+        });
     }
 
     int GetTeamIndexByName(string name)
@@ -260,5 +313,20 @@ public class LevelBoardUI : UIDialog
             }
         }
         return teamIndex;
+    }
+
+    void SendToSocket(string action , object data)
+    {
+        send.Push(() =>
+        {
+            var msg = JsonConvert.SerializeObject(new { action = action, data = data });
+            SocketConnection.Instance.SentDataToServer(msg);
+        });
+    }
+
+    public void Return()
+    {
+        UIManager.GetInstance().OpenDialog("MainMenuUI");
+        UIManager.GetInstance().CloseDialog(this);
     }
 }

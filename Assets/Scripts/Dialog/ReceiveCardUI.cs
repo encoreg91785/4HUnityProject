@@ -61,25 +61,32 @@ public class ReceiveCardUI : UIDialog
         confirmBtn.interactable = false;
     }
 
-    public void ConfirmTask()
+    public void ConfirmCrad()
+    {
+        var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+        ui.SetUI("確定執行", false, () => { GetCard(); });
+    }
+
+    void GetCard()
     {
         Utility.LoadingPromise().Then(_ => {
             List<int> idList = new List<int>();
             for (int i = 0; i < viewItem.Count; i++)
             {
-                if(viewItem[i].ReceiveNow()) idList.Add(viewItem[i].card.id);
+                if (viewItem[i].ReceiveNow()) idList.Add(viewItem[i].card.id);
             }
             UnityWebRequest www = HttpHelper.DoPut("card", new { cardid = idList });
             return Answer.Resolve(www);
         }).Then(result => {
             return Utility.ParseServerRespond<object>((string)result);
         }).Then(_ => {
+            var u = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+            u.SetUI("成功", true);
             ClearUIData();
             return Answer.Resolve();
         }).Reject(error => {
             Debug.Log(error);
         }).Invoke(this);
-        
     }
 
     void GetPlayerQRCode(string qrcode)

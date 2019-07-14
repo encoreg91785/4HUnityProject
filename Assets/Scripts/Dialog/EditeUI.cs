@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class EditeUI : UIDialog
 {
     [SerializeField]
-    InputField rqcodeField, nameField,teamField;
+    InputField rqcodeField, nameField, teamField;
     [SerializeField]
     Button enterBtn;
     Player playerData;
@@ -56,7 +56,8 @@ public class EditeUI : UIDialog
     /// </summary>
     public void EnterEdite()
     {
-        UpdatePlayerData();
+        var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+        ui.SetUI("確定執行", false, () => { UpdatePlayerData(); });
     }
 
     /// <summary>
@@ -84,17 +85,23 @@ public class EditeUI : UIDialog
 
     void UpdatePlayerData()
     {
-        Utility.LoadingPromise().Then(_ => {
-            UnityWebRequest www = HttpHelper.DoPut("player", new { playerqrcode = "player1",updateData= newData.ToJsonIngoreNull() });
+        Utility.LoadingPromise().Then(_ =>
+        {
+            UnityWebRequest www = HttpHelper.DoPut("player", new { playerqrcode = "player1", updateData = newData.ToJsonIngoreNull() });
             return Answer.Resolve(www);
-        }).Then(result => {
+        }).Then(result =>
+        {
             return Utility.ParseServerRespond<Player>((string)result);
-        }).Then(result => {
+        }).Then(result =>
+        {
             playerData.UpdateData<Player>(newData);
             enterBtn.interactable = false;
             UpdateUI(playerData);
+            var u = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+            u.SetUI("成功", true);
             return Answer.Resolve();
-        }).Reject(error => {
+        }).Reject(error =>
+        {
             Debug.Log(error);
         }).Invoke(this);
     }
@@ -111,16 +118,20 @@ public class EditeUI : UIDialog
     /// <param name="qrcode"></param>
     void GetPlayerData(string qrcode)
     {
-        Utility.LoadingPromise().Then(_ => {
+        Utility.LoadingPromise().Then(_ =>
+        {
             UnityWebRequest www = HttpHelper.DoGet("player", new { playerqrcode = qrcode });
             return Answer.Resolve(www);
-        }).Then(result => {
+        }).Then(result =>
+        {
             return Utility.ParseServerRespond<Player>((string)result);
-        }).Then(result => {
+        }).Then(result =>
+        {
             playerData = result as Player;
             UpdateUI(playerData);
             return Answer.Resolve();
-        }).Reject(error => {
+        }).Reject(error =>
+        {
             Debug.Log(error);
         }).Invoke(this);
     }

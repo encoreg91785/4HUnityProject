@@ -174,13 +174,23 @@ public class ReceiveMissionUI : UIDialog
             {
                 QRCodeUI qrUi = (QRCodeUI)UIManager.GetInstance().GetDialog("QRCodeUI");
                 qrUi.StopScan();
-                Action enter = () => { GetPlayerData(qrcode); };
-                Action cancel = () => {
-                    qrUi.StartScan();
-                    UIManager.GetInstance().CloseDialog("LoadingUI");
-                };
                 var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
-                ui.SetUI(string.Format("此玩家已完成過{0}次任務，是否讓他加入此任務?", (int)result),false,enter,cancel);
+                if (task.max == 0&& (int)result >= 1)
+                {
+                    UIManager.GetInstance().CloseDialog("LoadingUI");
+                    ui.SetUI(string.Format("此玩家已經完成過，無法再次進行任務", (int)result), true,()=>{ qrUi.StartScan(); });
+                }
+                else
+                {
+                    Action enter = () => { GetPlayerData(qrcode); };
+                    Action cancel = () => {
+                        qrUi.StartScan();
+                        UIManager.GetInstance().CloseDialog("LoadingUI");
+                    };
+
+                    ui.SetUI(string.Format("此玩家已完成過{0}次任務，是否讓他加入此任務?", (int)result), false, enter, cancel);
+                }
+                
             }
             else
             {
@@ -188,6 +198,7 @@ public class ReceiveMissionUI : UIDialog
             }
             return Answer.Resolve();
         }).Reject(error => {
+            UIManager.GetInstance().CloseDialog("LoadingUI");
             Debug.Log(error);
         }).Invoke(this);
     }
@@ -202,44 +213,50 @@ public class ReceiveMissionUI : UIDialog
 
     public void OnConfimTask()
     {
-        
+        var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+        ui.SetUI("確定執行", false, () => { CompleteTask(); });
+    }
+
+    void CompleteTask()
+    {
         List<string> qrcode = new List<string>();
         for (int i = 0; i < itemList.Count; i++)
         {
             if (itemList[i].IsSelect()) qrcode.Add(itemList[i].player.qrcode);
         }
-        int[] tc =new int[0];
+        int[] tc = new int[0];
         Utility.LoadingPromise().Then(result => {
-            UnityWebRequest www = HttpHelper.DoGet("temp/taskAndcard/count", new {cardid = task.cardid, taskqrcode = task.qrcode });
+            UnityWebRequest www = HttpHelper.DoGet("temp/taskAndcard/count", new { cardid = task.cardid, taskqrcode = task.qrcode });
             return Answer.Resolve(www);
         }).Then(result => {
             return Utility.ParseServerRespond<int[]>((string)result);
         }).Then(result => {
             tc = result as int[];
-            if (CheckTaskCount(tc[0]+ qrcode.Count))
+            if (CheckTaskCount(tc[0] + qrcode.Count))
             {
                 UnityWebRequest www = HttpHelper.DoPost("task", new { playerqrcode = qrcode, taskqrcode = task.qrcode });
                 return Answer.Resolve(www);
             }
             else
             {
-                return Answer.Reject(string.Format("({0}+{1})/{2}\n{3} 任務將超過可完成上限，請確認人數", tc[0],qrcode.Count,task.max,task.name));
+                return Answer.Reject(string.Format("({0}+{1})/{2}\n{3} 任務將超過可完成上限，請確認人數", tc[0], qrcode.Count, task.max, task.name));
             }
         }).Then(result => {
             return Utility.ParseServerRespond<object>((string)result);
-        }).Then(result => {
+        }).Then(_ => {
             var carddata = Main.GetInstance().GetCardData(task.cardid);
-            if (!(carddata.max == 0 || carddata.max == -1))
+            if (carddata !=null&& !(carddata.max == 0 || carddata.max == -1))
             {
                 if (carddata.max - tc[1] <= qrcode.Count)
                 {
                     var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
                     var done = false;
                     var isCancel = false;
-                    ui.SetUI("{0}/{1} 卡片取得上限將超過當前人數，\n部分人將無法取得卡片是否繼續?",false,()=> { done = true; },()=> { done = true; isCancel = true; });
+                    ui.SetUI("{0}/{1} 卡片取得上限將超過當前人數，\n部分人將無法取得卡片是否繼續?", false, () => { done = true; }, () => { done = true; isCancel = true; });
                     return Answer.PendingUntil(isCancel, () => { return done; });
                 }
             }
+            else Answer.Reject(task.cardid+"卡片不存在");
             return Answer.Resolve(true);
         }).Then(result => {
             if ((bool)result)
@@ -247,8 +264,10 @@ public class ReceiveMissionUI : UIDialog
                 UnityWebRequest www = HttpHelper.DoPost("card", new { playerqrcode = qrcode, cardid = task.cardid, from = task.qrcode });
                 return Answer.Resolve(www);
             }
-            else return Answer.Reject();     
+            else return Answer.Reject();
         }).Then(result => {
+            var u = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+            u.SetUI("成功", true);
             CleanUI();
             return Answer.Resolve();
         }).Reject(error => {

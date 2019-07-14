@@ -557,7 +557,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u7372\u53D6\u5361\u7247"
+  m_Text: "\u63DB\u53D6\u5361\u7247"
 --- !u!1 &1603491423947022
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,7 +679,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7528348659865523709}
-        m_MethodName: ConfirmTask
+        m_MethodName: ConfirmCrad
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -12,9 +12,9 @@ public static class Utility
     /// </summary>
     /// <param name="canvasGroup"></param>
     /// <param name="torf"></param>
-    public static void Active(this CanvasGroup canvasGroup,bool torf)
+    public static void Active(this CanvasGroup canvasGroup, bool torf)
     {
-        canvasGroup.alpha = torf ? 1:0 ;
+        canvasGroup.alpha = torf ? 1 : 0;
         canvasGroup.blocksRaycasts = torf;
     }
 
@@ -25,10 +25,12 @@ public static class Utility
     /// <returns></returns>
     public static Promise LoadingPromise()
     {
-        return new Promise().Then(_ => {
+        return new Promise().Then(_ =>
+        {
             UIManager.GetInstance().OpenDialog("LoadingUI");
             return Answer.Resolve();
-        }).Done(()=> {
+        }).Done(() =>
+        {
             UIManager.GetInstance().CloseDialog("LoadingUI");
         });
     }
@@ -42,7 +44,7 @@ public static class Utility
     /// <param name="target">比對者</param>
     /// <param name="ignoreNull">不會更新Null值</param>
     /// <returns></returns>
-    public static bool UpdateData<T>(this object self,object target,bool ignoreNull = true)
+    public static bool UpdateData<T>(this object self, object target, bool ignoreNull = true)
     {
         bool isUpdate = false;
         var ls = typeof(T).GetFields();
@@ -50,7 +52,7 @@ public static class Utility
         {
             var v = prop.GetValue(target);
             var selfv = prop.GetValue(self);
-            if ((v != null|| ignoreNull ==false) && !v.Equals(selfv))
+            if ((v != null || ignoreNull == false) && !v.Equals(selfv))
             {
                 prop.SetValue(self, v);
                 isUpdate = true;
@@ -72,7 +74,7 @@ public static class Utility
         }
 
     }
-
+    
     [Serializable]
     class HttpRespond<T>
     {
@@ -84,10 +86,12 @@ public static class Utility
             if (data != null)
             {
                 d = JsonConvert.DeserializeObject<T>(data.ToString());
-            } 
+            }
             return d;
         }
     }
+
+    
 
     #region 存讀檔案
 #if UNITY_EDITOR
@@ -124,11 +128,11 @@ public static class Utility
         file.Write(byteArray, 0, byteArray.Length);
         file.Close();
     }
-#endregion
+    #endregion
 
     #region 加解密 AES
     static RijndaelManaged AES = new RijndaelManaged();
-    static MD5CryptoServiceProvider MD5 =new MD5CryptoServiceProvider();
+    static MD5CryptoServiceProvider MD5 = new MD5CryptoServiceProvider();
     readonly static string key = "Unity3DPracticeProject";
 
     /// <summary>
@@ -137,7 +141,7 @@ public static class Utility
     /// <param name="plainText"></param>
     /// <param name="key"></param>
     /// <returns></returns>
-    private static string Encrypt(string plainText, string key=null)
+    private static string Encrypt(string plainText, string key = null)
     {
         if (key == null) key = Utility.key;
         byte[] plainTextData = Encoding.Unicode.GetBytes(plainText);
@@ -154,7 +158,7 @@ public static class Utility
     /// <param name="cipherText"></param>
     /// <param name="key"></param>
     /// <returns></returns>
-    public static string Decrypt(string cipherText, string key=null)
+    public static string Decrypt(string cipherText, string key = null)
     {
         if (key == null) key = Utility.key;
         return Decrypt(Convert.FromBase64String(cipherText), key);
@@ -166,7 +170,7 @@ public static class Utility
     /// <param name="cipherTextData"></param>
     /// <param name="key"></param>
     /// <returns></returns>
-    private static string Decrypt(byte[] cipherTextData, string key=null)
+    private static string Decrypt(byte[] cipherTextData, string key = null)
     {
         if (key == null) key = Utility.key;
         string data = "";
@@ -184,5 +188,5 @@ public static class Utility
         }
         return data;
     }
-#endregion
+    #endregion
 }

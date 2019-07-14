@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using UnityEngine;
 
@@ -46,7 +47,8 @@ public class SocketConnection
             try
             {
                 socketConnection = new TcpClient(ip, port);
-                Byte[] bytes = new Byte[1024];
+                socketConnection.NoDelay = true;
+                Byte[] bytes = new Byte[1024*64];
                 while (socketConnection.Connected)
                 {
                     // Get a stream object for reading 				
@@ -60,10 +62,31 @@ public class SocketConnection
                             var incommingData = new byte[length];
                             Array.Copy(bytes, 0, incommingData, 0, length);
                             // Convert byte array to string message. 						
-                            string serverMessage = Encoding.ASCII.GetString(incommingData);
+                            string serverMessage = Encoding.UTF8.GetString(incommingData);
+                            var ls = Regex.Split(serverMessage, "}{");
                             Debug.Log(serverMessage);
-                            GetDataFunction(serverMessage);
- 
+                            //GetDataFunction(serverMessage);
+                            if (ls.Length > 1)
+                            {
+                                for (int i = 0; i < ls.Length; i++)
+                                {
+                                    if (i == 0)
+                                    {
+                                        ls[i] = ls[i] + "}";
+                                    }
+                                    else if (i == ls.Length - 1)
+                                    {
+                                        ls[i] = "{" + ls[i];
+                                    }
+                                    else
+                                    {
+                                        ls[i] = "{" + ls[i] + "}";
+                                    }
+                                    Debug.Log(ls[i]);
+                                    GetDataFunction(ls[i]);
+                                }
+                            }
+                            else GetDataFunction(serverMessage);
                         }
                     }
                 }
@@ -95,7 +118,7 @@ public class SocketConnection
             if (stream.CanWrite)
             {
                 // Convert string message to byte array.                 
-                byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(message);
+                byte[] clientMessageAsByteArray = Encoding.UTF8.GetBytes(message);
                 // Write byte array to socketConnection stream.                 
                 stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
             }

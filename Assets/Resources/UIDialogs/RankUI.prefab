@@ -78,7 +78,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "XXXXXX\u516C\u6703"
+  m_Text: '
+
+'
 --- !u!1 &1011605567012180
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,7 +450,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "XXXXXX\u516C\u6703"
+  m_Text: '
+
+'
 --- !u!1 &1174479298526568
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,7 +971,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "XXXXXX\u516C\u6703"
+  m_Text: '
+
+'
 --- !u!1 &1350046495736648
 GameObject:
   m_ObjectHideFlags: 0
@@ -2208,7 +2214,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "XXXXXX\u516C\u6703"
+  m_Text: '
+
+'
 --- !u!1 &1987390693611466
 GameObject:
   m_ObjectHideFlags: 0
@@ -2442,7 +2450,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 10000
+  m_Text: '
+
+'
 --- !u!1 &178457392459046491
 GameObject:
   m_ObjectHideFlags: 0
@@ -2658,7 +2668,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 346860733442614899}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -3892,7 +3902,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1432417854711750793}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -4190,7 +4200,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1913640922145527724}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -4473,7 +4483,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2210620863213480034}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -4555,7 +4565,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "~~~~~~~~~~~~~~\u606D\u559C:\u7B2C\u4E00\u5C0F\u7A2E\u985E\u4EE5\u9054\u523080\u7A2E"
+  m_Text: 
 --- !u!1 &2333556067162504244
 GameObject:
   m_ObjectHideFlags: 0
@@ -5108,7 +5118,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "~~~~~~~~~~~~~~\u606D\u559C:\u7B2C\u4E00\u5C0F\u7A2E\u985E\u4EE5\u9054\u523080\u7A2E"
+  m_Text: 
 --- !u!1 &3250798969291315248
 GameObject:
   m_ObjectHideFlags: 0
@@ -5266,7 +5276,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "~~~~~~~~~~~~~~\u606D\u559C:\u7B2C\u4E00\u5C0F\u7A2E\u985E\u4EE5\u9054\u523080\u7A2E"
+  m_Text: 
 --- !u!1 &3858451598588386058
 GameObject:
   m_ObjectHideFlags: 0
@@ -5403,7 +5413,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3858451598588386058}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -5485,7 +5495,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 10000
+  m_Text: '
+
+'
 --- !u!1 &4040273941921616158
 GameObject:
   m_ObjectHideFlags: 0
@@ -5622,7 +5634,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4040273941921616158}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -5862,7 +5874,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "~~~~~~~~~~~~~~\u606D\u559C:\u7B2C\u4E00\u5C0F\u7A2E\u985E\u4EE5\u9054\u523080\u7A2E"
+  m_Text: 
 --- !u!1 &4599018935141851791
 GameObject:
   m_ObjectHideFlags: 0
@@ -5941,7 +5953,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 10000
+  m_Text: '
+
+'
 --- !u!1 &4882630165434900636
 GameObject:
   m_ObjectHideFlags: 0
@@ -6573,7 +6587,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "~~~~~~~~~~~~~~\u606D\u559C:\u7B2C\u4E00\u5C0F\u7A2E\u985E\u4EE5\u9054\u523080\u7A2E"
+  m_Text: 
 --- !u!1 &5627663793566779031
 GameObject:
   m_ObjectHideFlags: 0
@@ -6789,7 +6803,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5742298491383327266}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -6871,7 +6885,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "~~~~~~~~~~~~~~\u606D\u559C:\u7B2C\u4E00\u5C0F\u7A2E\u985E\u4EE5\u9054\u523080\u7A2E"
+  m_Text: 
 --- !u!1 &6272491271424698011
 GameObject:
   m_ObjectHideFlags: 0
@@ -7008,7 +7022,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6272491271424698011}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -7385,7 +7399,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6877649765718181054}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -7525,7 +7539,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6999326691806274409}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -8318,7 +8332,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 10000
+  m_Text: '
+
+'
 --- !u!1 &8268843081607750508
 GameObject:
   m_ObjectHideFlags: 0
