@@ -87,7 +87,7 @@ public class EditeUI : UIDialog
     {
         Utility.LoadingPromise().Then(_ =>
         {
-            UnityWebRequest www = HttpHelper.DoPut("player", new { playerqrcode = "player1", updateData = newData.ToJsonIngoreNull() });
+            UnityWebRequest www = HttpHelper.DoPut("player", new { playerqrcode = playerData.qrcode, updateData = newData.ToJsonIngoreNull() });
             return Answer.Resolve(www);
         }).Then(result =>
         {

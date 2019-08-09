@@ -18,6 +18,7 @@ public class ReceiveMissionUI : UIDialog
     List<PlayerItem> itemList = new List<PlayerItem>();
     List<Player> playerList = new List<Player>();
     TaskData task = null;
+    int[] tc = null;
     private void Start()
     {
         CleanUI();
@@ -68,14 +69,14 @@ public class ReceiveMissionUI : UIDialog
             }
             else
             {
-                return Answer.Reject(qrcode+" is null");
+                return Answer.Reject("此QRCODE內容無法找出任務資料");
             }
                 
         }).Then(result => {
             return Utility.ParseServerRespond<int[]>((string)result);
         }).Then(result => {
-            var r = result as int[];
-            if (CheckTaskCount(r[0]))
+            tc = result as int[];
+            if (tc[0]<task.max)
             {
                 taskName.text = task.name;
                 taskCondition.text = task.condition;
@@ -87,7 +88,7 @@ public class ReceiveMissionUI : UIDialog
             else
             {
                 confirmBtn.interactable = false;
-                return Answer.Reject(string.Format("任務{0}/{1}", r[0], task.max));
+                return Answer.Reject(string.Format("任務{0}/{1}超過任務上限", tc[0], task.max));
             }
         }).Done(() => {
             UIManager.GetInstance().CloseDialog("LoadingUI");
@@ -144,6 +145,7 @@ public class ReceiveMissionUI : UIDialog
                 u.SetUI(msg, false, enter, cancel);
                 AddPlayerItem(p);
                 confirmBtn.interactable = task != null;
+
             }
             else
             {
@@ -224,7 +226,7 @@ public class ReceiveMissionUI : UIDialog
         {
             if (itemList[i].IsSelect()) qrcode.Add(itemList[i].player.qrcode);
         }
-        int[] tc = new int[0];
+        tc = new int[0];
         Utility.LoadingPromise().Then(result => {
             UnityWebRequest www = HttpHelper.DoGet("temp/taskAndcard/count", new { cardid = task.cardid, taskqrcode = task.qrcode });
             return Answer.Resolve(www);
@@ -264,7 +266,7 @@ public class ReceiveMissionUI : UIDialog
                 UnityWebRequest www = HttpHelper.DoPost("card", new { playerqrcode = qrcode, cardid = task.cardid, from = task.qrcode });
                 return Answer.Resolve(www);
             }
-            else return Answer.Reject();
+            else return Answer.Resolve();
         }).Then(result => {
             var u = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
             u.SetUI("成功", true);
@@ -288,7 +290,7 @@ public class ReceiveMissionUI : UIDialog
         }
         else
         {
-            return task.max >tc;
+            return task.max >=tc;
         }
         
     }
