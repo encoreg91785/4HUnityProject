@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ public class PlayerRankItem : MonoBehaviour
         this.pk = pk;
         nameText.text = pk.name;
         rankText.text = pk.rank.ToString();
-        teamText.text = pk.team;
+        teamText.text = ((TeamName)Convert.ToInt32(pk.team)).ToString();
         amountText.text = pk.amount.ToString();
         GetComponent<CanvasGroup>().alpha = 1;
     }
@@ -24,7 +25,7 @@ public class PlayerRankItem : MonoBehaviour
         pk = null;
         nameText.text = "";
         rankText.text = "";
-        teamText.text = "";
+        teamText.text = ((TeamName)Convert.ToInt32(0)).ToString();
         amountText.text = "";
         GetComponent<CanvasGroup>().alpha = 0;
     }

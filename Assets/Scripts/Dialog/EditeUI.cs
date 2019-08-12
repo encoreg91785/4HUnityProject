@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -80,7 +81,7 @@ public class EditeUI : UIDialog
     {
         rqcodeField.text = p.qrcode;
         nameField.text = p.name;
-        teamField.text = p.team;
+        teamField.text = ((TeamName)Convert.ToInt32(p.team)).ToString() ;
     }
 
     void UpdatePlayerData()
@@ -132,7 +133,8 @@ public class EditeUI : UIDialog
             return Answer.Resolve();
         }).Reject(error =>
         {
-            Debug.Log(error);
+            var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+            ui.SetUI("發生錯誤QRcode" + qrcode, false, () => { UpdatePlayerData(); });
         }).Invoke(this);
     }
 
@@ -143,6 +145,6 @@ public class EditeUI : UIDialog
         playerData = null;
         rqcodeField.text = "";
         nameField.text = "";
-        teamField.text = "";
+        teamField.text = TeamName.無.ToString() ;
     }
 }

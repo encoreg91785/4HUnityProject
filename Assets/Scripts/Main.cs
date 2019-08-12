@@ -6,6 +6,15 @@ using Newtonsoft.Json;
 using System;
 using System.Text.RegularExpressions;
 
+public enum TeamName
+{
+    無,
+    朱雀,
+    青龍,
+    玄武,
+    白虎
+}
+
 public class Main : MonoBehaviour
 {
     static Main instance = null;

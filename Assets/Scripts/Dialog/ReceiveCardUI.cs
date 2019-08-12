@@ -85,7 +85,9 @@ public class ReceiveCardUI : UIDialog
             ClearUIData();
             return Answer.Resolve();
         }).Reject(error => {
-            Debug.Log(error);
+            ClearUIData();
+            var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+            ui.SetUI("發生錯誤: "+error,true);
         }).Invoke(this);
     }
 
@@ -119,7 +121,9 @@ public class ReceiveCardUI : UIDialog
             }
             return Answer.Resolve();
         }).Reject(error => {
-            Debug.Log(error);
+            ClearUIData();
+            var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+            ui.SetUI("發生錯誤"+error, true);
         }).Invoke(this);
     }
 }

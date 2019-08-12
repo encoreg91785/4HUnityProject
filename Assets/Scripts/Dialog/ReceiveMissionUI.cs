@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class ReceiveMissionUI : UIDialog
 {
     [SerializeField]
-    Text taskName, taskCondition, taskInformation;
+    Text taskName, taskCondition;
     [SerializeField]
     Button confirmBtn,scanPlayerBtn;
     [SerializeField]
@@ -76,11 +76,10 @@ public class ReceiveMissionUI : UIDialog
             return Utility.ParseServerRespond<int[]>((string)result);
         }).Then(result => {
             tc = result as int[];
-            if (tc[0]<task.max)
+            if (task.max==0||tc[0]<task.max)
             {
-                taskName.text = task.name;
-                taskCondition.text = task.condition;
-                taskInformation.text = task.information;
+                taskName.text = "任務名稱\n"+task.name;
+                taskCondition.text ="類別 : " +task.type+"\n"+"QRCode : "+task.qrcode;
                 confirmBtn.interactable = playerList.Count > 0;
                 scanPlayerBtn.interactable = true;
                 return Answer.Resolve();
@@ -93,7 +92,6 @@ public class ReceiveMissionUI : UIDialog
         }).Done(() => {
             UIManager.GetInstance().CloseDialog("LoadingUI");
         }).Reject(error => {
-            Main.GetInstance().CloseUIQRCode();
             var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
             ui.SetUI(error,true);
             Debug.Log(error);
@@ -104,7 +102,6 @@ public class ReceiveMissionUI : UIDialog
     {
         taskName.text = "";
         taskCondition.text = "";
-        taskInformation.text = "";
         task = null;
         playerList.Clear();
         confirmBtn.interactable = false;
@@ -201,6 +198,8 @@ public class ReceiveMissionUI : UIDialog
             return Answer.Resolve();
         }).Reject(error => {
             UIManager.GetInstance().CloseDialog("LoadingUI");
+            var ui = UIManager.GetInstance().OpenDialog<ConfirmUI>("ConfirmUI");
+            ui.SetUI("發生錯誤" + error, true);
             Debug.Log(error);
         }).Invoke(this);
     }
