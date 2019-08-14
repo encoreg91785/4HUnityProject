@@ -61,6 +61,11 @@ public static class Utility
         return isUpdate;
     }
 
+    public static T ParseEnum<T>(string value)
+    {
+        return (T)Enum.Parse(typeof(T), value, true);
+    }
+
     public static Answer ParseServerRespond<T>(string jsonStr)
     {
         HttpRespond<T> res = JsonConvert.DeserializeObject<HttpRespond<T>>(jsonStr);

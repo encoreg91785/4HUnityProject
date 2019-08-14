@@ -40,9 +40,9 @@ public class Main : MonoBehaviour
     void Start()
     {
 
-        var str = "{\"action\":\"UpdatePoint\",\"data\":{\"id\":21,\"position\":{\"x\":183.050781,\"y\":-102.508484,\"z\":0},\"belong\":\"隊伍2\"}}{\"action\":\"UpdatePoint\",\"data\":{\"id\":21,\"position\":{\"x\":183.050781,\"y\":-102.508484,\"z\":0},\"belong\":\"隊伍2\"}}";
+        //var str = "{\"action\":\"UpdatePoint\",\"data\":{\"id\":21,\"position\":{\"x\":183.050781,\"y\":-102.508484,\"z\":0},\"belong\":\"隊伍2\"}}{\"action\":\"UpdatePoint\",\"data\":{\"id\":21,\"position\":{\"x\":183.050781,\"y\":-102.508484,\"z\":0},\"belong\":\"隊伍2\"}}";
         //var ls = Regex.Split(str, @"/(\{.+?\})(?={|$)/g");
-        var ls = Regex.Split(str, "}{");
+        //var ls = Regex.Split(str, "}{");
         //var ls = Regex.Escape(str);
         Application.targetFrameRate = 30;
         uiQRCode = UIManager.GetInstance().OpenDialog<QRCodeUI>("QRCodeUI");
@@ -121,10 +121,10 @@ public class Main : MonoBehaviour
     Promise GetServerIp()
     {
         LoadingUI load = UIManager.GetInstance().OpenDialog<LoadingUI>("LoadingUI");
-        //return new Promise().Done(() =>
-        //{
-        //    UIManager.GetInstance().CloseDialog("LoadingUI");
-        //});
+        return new Promise().Done(() =>
+        {
+            UIManager.GetInstance().CloseDialog("LoadingUI");
+        });
         return new Promise().Then(_ =>
         {
             UnityWebRequest www = HttpHelper.DoGet("https://rpg4hproject.firebaseio.com/IP.json", null, false);

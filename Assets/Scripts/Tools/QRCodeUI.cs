@@ -27,7 +27,7 @@ public class QRCodeUI : UIDialog {
         }
         camSelect.AddOptions(camLs);
         camSelect.onValueChanged.AddListener(OnSelectOne);
-        if(wcdArray.Length>=0) OnSelectOne(0);
+        if(wcdArray.Length>0) OnSelectOne(0);
         if (cam != null) StopScan();
     }
 

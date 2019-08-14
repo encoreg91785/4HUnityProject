@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -467,6 +468,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 155511755}
     m_Modifications:
+    - target: {fileID: 1479235868490138, guid: 8a8938bac5cf87a469385ba4537cb191, type: 3}
+      propertyPath: m_Name
+      value: ReceiveCardUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1479235868490138, guid: 8a8938bac5cf87a469385ba4537cb191, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224588203252266762, guid: 8a8938bac5cf87a469385ba4537cb191,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -572,14 +581,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1479235868490138, guid: 8a8938bac5cf87a469385ba4537cb191, type: 3}
-      propertyPath: m_Name
-      value: ReceiveCardUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 1479235868490138, guid: 8a8938bac5cf87a469385ba4537cb191, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5377499555414937664, guid: 8a8938bac5cf87a469385ba4537cb191,
         type: 3}
       propertyPath: m_SizeDelta.y
@@ -658,7 +659,7 @@ PrefabInstance:
     - target: {fileID: 746805249840080202, guid: 8a8938bac5cf87a469385ba4537cb191,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 50.000122
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a8938bac5cf87a469385ba4537cb191, type: 3}
@@ -669,6 +670,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 155511755}
     m_Modifications:
+    - target: {fileID: 1773662634490320, guid: 4560c54928e7e70478b2b7c7d72daff3, type: 3}
+      propertyPath: m_Name
+      value: EditeUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1773662634490320, guid: 4560c54928e7e70478b2b7c7d72daff3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224050857062276094, guid: 4560c54928e7e70478b2b7c7d72daff3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -774,14 +783,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1773662634490320, guid: 4560c54928e7e70478b2b7c7d72daff3, type: 3}
-      propertyPath: m_Name
-      value: EditeUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 1773662634490320, guid: 4560c54928e7e70478b2b7c7d72daff3, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4560c54928e7e70478b2b7c7d72daff3, type: 3}
 --- !u!224 &934073917 stripped
@@ -797,6 +798,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 155511755}
     m_Modifications:
+    - target: {fileID: 1903725609846362, guid: e41a6d72ba882a1489e2c913ad4f3f33, type: 3}
+      propertyPath: m_Name
+      value: RankUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1903725609846362, guid: e41a6d72ba882a1489e2c913ad4f3f33, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224182239474706134, guid: e41a6d72ba882a1489e2c913ad4f3f33,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -901,14 +910,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1903725609846362, guid: e41a6d72ba882a1489e2c913ad4f3f33, type: 3}
-      propertyPath: m_Name
-      value: RankUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 1903725609846362, guid: e41a6d72ba882a1489e2c913ad4f3f33, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224582359786228680, guid: e41a6d72ba882a1489e2c913ad4f3f33,
         type: 3}
@@ -2365,6 +2366,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 155511755}
     m_Modifications:
+    - target: {fileID: 1861285421735374, guid: f0f8745a316c6e34a9deb8741c51d030, type: 3}
+      propertyPath: m_Name
+      value: ReceiveMissionUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861285421735374, guid: f0f8745a316c6e34a9deb8741c51d030, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224092104573727694, guid: f0f8745a316c6e34a9deb8741c51d030,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2470,14 +2479,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1861285421735374, guid: f0f8745a316c6e34a9deb8741c51d030, type: 3}
-      propertyPath: m_Name
-      value: ReceiveMissionUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 1861285421735374, guid: f0f8745a316c6e34a9deb8741c51d030, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 224954366820814282, guid: f0f8745a316c6e34a9deb8741c51d030,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -2553,6 +2554,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6868497324818913807, guid: f0f8745a316c6e34a9deb8741c51d030,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0f8745a316c6e34a9deb8741c51d030, type: 3}
 --- !u!224 &1525160796 stripped
@@ -2568,6 +2574,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 155511755}
     m_Modifications:
+    - target: {fileID: 3313799899241578799, guid: 4d082296de005e44b82e59372659d2a3,
+        type: 3}
+      propertyPath: m_Name
+      value: LevelBoardUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 3313799899241578799, guid: 4d082296de005e44b82e59372659d2a3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1605769756973398762, guid: 4d082296de005e44b82e59372659d2a3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2673,20 +2689,20 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3313799899241578799, guid: 4d082296de005e44b82e59372659d2a3,
+    - target: {fileID: 259774503226135832, guid: 4d082296de005e44b82e59372659d2a3,
         type: 3}
-      propertyPath: m_Name
-      value: LevelBoardUI
+      propertyPath: m_AnchorMax.x
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3313799899241578799, guid: 4d082296de005e44b82e59372659d2a3,
+    - target: {fileID: 259774503226135832, guid: 4d082296de005e44b82e59372659d2a3,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8107426741715644336, guid: 4d082296de005e44b82e59372659d2a3,
+    - target: {fileID: 259774503226135832, guid: 4d082296de005e44b82e59372659d2a3,
         type: 3}
-      propertyPath: m_AspectRatio
-      value: 1.5747228
+      propertyPath: m_SizeDelta.y
+      value: 266.66663
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d082296de005e44b82e59372659d2a3, type: 3}
@@ -2703,6 +2719,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 155511755}
     m_Modifications:
+    - target: {fileID: 1573329465625956, guid: 7bcf9fc941a39764f967462f79ceadf6, type: 3}
+      propertyPath: m_Name
+      value: ConfirmUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573329465625956, guid: 7bcf9fc941a39764f967462f79ceadf6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224373571862026120, guid: 7bcf9fc941a39764f967462f79ceadf6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2808,14 +2832,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1573329465625956, guid: 7bcf9fc941a39764f967462f79ceadf6, type: 3}
-      propertyPath: m_Name
-      value: ConfirmUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 1573329465625956, guid: 7bcf9fc941a39764f967462f79ceadf6, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 224491496150467406, guid: 7bcf9fc941a39764f967462f79ceadf6,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -2871,6 +2887,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 155511755}
     m_Modifications:
+    - target: {fileID: 1714228228112230, guid: bd9d6cf9ef097214480f5db47636967a, type: 3}
+      propertyPath: m_Name
+      value: MainMenuUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1714228228112230, guid: bd9d6cf9ef097214480f5db47636967a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224678149668662514, guid: bd9d6cf9ef097214480f5db47636967a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2976,14 +3000,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1714228228112230, guid: bd9d6cf9ef097214480f5db47636967a, type: 3}
-      propertyPath: m_Name
-      value: MainMenuUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714228228112230, guid: bd9d6cf9ef097214480f5db47636967a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd9d6cf9ef097214480f5db47636967a, type: 3}
 --- !u!1001 &1531600993267838045
@@ -2993,6 +3009,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 155511755}
     m_Modifications:
+    - target: {fileID: 1531600994540496199, guid: 62761a2a70f995f4197d57cace52498d,
+        type: 3}
+      propertyPath: m_Name
+      value: QRCodeUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531600994540496199, guid: 62761a2a70f995f4197d57cace52498d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1531600994540496198, guid: 62761a2a70f995f4197d57cace52498d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3098,16 +3124,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1531600994540496199, guid: 62761a2a70f995f4197d57cace52498d,
-        type: 3}
-      propertyPath: m_Name
-      value: QRCodeUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 1531600994540496199, guid: 62761a2a70f995f4197d57cace52498d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1531600993170997387, guid: 62761a2a70f995f4197d57cace52498d,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -3132,6 +3148,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 155511755}
     m_Modifications:
+    - target: {fileID: 2864678619048442047, guid: 824f1bc84ecc56740bdcb48d5d9883e1,
+        type: 3}
+      propertyPath: m_Name
+      value: TransactionCardUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 2864678619048442047, guid: 824f1bc84ecc56740bdcb48d5d9883e1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2864678619048442040, guid: 824f1bc84ecc56740bdcb48d5d9883e1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3236,16 +3262,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2864678619048442047, guid: 824f1bc84ecc56740bdcb48d5d9883e1,
-        type: 3}
-      propertyPath: m_Name
-      value: TransactionCardUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 2864678619048442047, guid: 824f1bc84ecc56740bdcb48d5d9883e1,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 824f1bc84ecc56740bdcb48d5d9883e1, type: 3}
