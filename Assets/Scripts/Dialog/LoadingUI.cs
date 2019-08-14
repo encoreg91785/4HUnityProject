@@ -11,9 +11,9 @@ public class LoadingUI : UIDialog
 
     private void Start()
     {
-        float t = 3;
-        loadImg.rectTransform.DORotate(new Vector3(0,0, 360),t,RotateMode.FastBeyond360).SetLoops(-1).SetEase(Ease.Linear);
-        loadImg.rectTransform.DOScale(Vector3.one*0.5f,t/2).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.OutCirc);
+        float t = 0.9f;
+        loadImg.rectTransform.DORotate(new Vector3(0,0, -30),t).SetLoops(-1,LoopType.Yoyo).SetEase(Ease.Flash);
+        
         //loadImg.rectTransform.DOAnchorPosX(350, t).SetLoops(-1,LoopType.Yoyo).SetEase(Ease.Linear);
     }
 

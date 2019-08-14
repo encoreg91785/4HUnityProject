@@ -121,10 +121,10 @@ public class Main : MonoBehaviour
     Promise GetServerIp()
     {
         LoadingUI load = UIManager.GetInstance().OpenDialog<LoadingUI>("LoadingUI");
-        return new Promise().Done(() =>
-        {
-            UIManager.GetInstance().CloseDialog("LoadingUI");
-        });
+        //return new Promise().Done(() =>
+        //{
+        //    UIManager.GetInstance().CloseDialog("LoadingUI");
+        //});
         return new Promise().Then(_ =>
         {
             UnityWebRequest www = HttpHelper.DoGet("https://rpg4hproject.firebaseio.com/IP.json", null, false);
