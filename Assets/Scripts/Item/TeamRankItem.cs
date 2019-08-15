@@ -9,7 +9,7 @@ public class TeamRankItem : MonoBehaviour
     public int rank;
     [SerializeField]
     Text teamNameText, amountText;
-    string[] color = new string[5] { "444444", "FFACAC", "B1E5FF", "CDFFB1", "FFF1B1" };
+    string[] color = new string[5] { "999999", "FFACAC", "B1E5FF", "CDFFB1", "FFF1B1" };
     public void SetTeamRank(TeamRank tr)
     {
         teamRank = tr;

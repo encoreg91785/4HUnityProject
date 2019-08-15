@@ -48,4 +48,9 @@ public class MainMenuUI : UIDialog
         UIManager.GetInstance().CloseDialog(this);
         UIManager.GetInstance().OpenDialog("LevelBoardUI");
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }
