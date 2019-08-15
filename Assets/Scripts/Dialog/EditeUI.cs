@@ -11,7 +11,9 @@ public class EditeUI : UIDialog
     InputField rqcodeField, nameField, teamField;
     [SerializeField]
     Button enterBtn;
+    [SerializeField]
     Player playerData;
+    [SerializeField]
     Player newData;
     // Start is called before the first frame update
     void Start()
@@ -81,7 +83,7 @@ public class EditeUI : UIDialog
     {
         rqcodeField.text = p.qrcode;
         nameField.text = p.name;
-        teamField.text = ((TeamName)Convert.ToInt32(p.team)).ToString() ;
+        teamField.text = p.team;
     }
 
     void UpdatePlayerData()

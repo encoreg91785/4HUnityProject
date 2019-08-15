@@ -76,7 +76,7 @@ public class ReceiveMissionUI : UIDialog
             return Utility.ParseServerRespond<int[]>((string)result);
         }).Then(result => {
             tc = result as int[];
-            if (task.max==0||tc[0]<task.max)
+            if (task.max == -1||task.max==0||tc[0]<task.max)
             {
                 taskName.text = "任務名稱\n"+task.name;
                 taskCondition.text ="類別 : " +task.type+"\n"+"QRCode : "+task.qrcode;

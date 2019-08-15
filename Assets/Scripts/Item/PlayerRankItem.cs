@@ -15,7 +15,7 @@ public class PlayerRankItem : MonoBehaviour
         this.pk = pk;
         nameText.text = pk.name;
         rankText.text = pk.rank.ToString();
-        teamText.text = ((TeamName)Convert.ToInt32(pk.team)).ToString();
+        teamText.text = pk.team;
         amountText.text = pk.amount.ToString();
         GetComponent<CanvasGroup>().alpha = 1;
     }

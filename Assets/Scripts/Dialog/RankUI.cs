@@ -18,8 +18,11 @@ public class RankUI : UIDialog
         GetBulletinList();
         GetPlayerRankList();
         GetTeamRankList();
+        var w = playerRankContent.GetComponent<RectTransform>().rect.width;
+        var grid = playerRankContent.GetComponentInChildren<GridLayoutGroup>();
+        grid.cellSize =new Vector2((w / 2.0f) - 24,grid.cellSize.y);
         InvokeRepeating("GetBulletinList",20,20);
-        InvokeRepeating("GetTeamRankList", 90, 90);
+        InvokeRepeating("GetTeamRankList", 20, 20);
     }
 
     void GetPlayerRankList()
@@ -44,7 +47,10 @@ public class RankUI : UIDialog
         bool isEnd = false;
         for (int i = 0; i < 10; i++)
         {
-            if (i + currentIndex < playerRankList.Length) ls[i].SetItem(playerRankList[i + currentIndex]);
+            if (i + currentIndex < playerRankList.Length)
+            {
+                ls[i].SetItem(playerRankList[i + currentIndex]);
+            } 
             else
             {
                 isEnd = true;
@@ -54,9 +60,13 @@ public class RankUI : UIDialog
         if (isEnd)
         {
             currentIndex = 0;
-            Invoke("GetPlayerRankList", 10);
+            Invoke(nameof(GetPlayerRankList), 10);
+        }
+        else
+        {
+            Invoke("SetPlayerRank", 10);
+            currentIndex += 10;
         } 
-        else currentIndex += 10;
     }
 
     void GetTeamRankList()
