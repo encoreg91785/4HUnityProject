@@ -60,11 +60,12 @@ public class RankUI : UIDialog
         if (isEnd)
         {
             currentIndex = 0;
-            Invoke(nameof(GetPlayerRankList), 10);
+            Invoke(nameof(GetPlayerRankList), 5);
         }
         else
         {
-            Invoke("SetPlayerRank", 10);
+            var time = currentIndex <= 10 ? 10 : 5;
+            Invoke("SetPlayerRank", time);
             currentIndex += 10;
         } 
     }
@@ -84,14 +85,22 @@ public class RankUI : UIDialog
             Debug.Log(error);
         }).Invoke(this);
     }
-
+    float[] player = new float[5] { 1f,12f, 12f, 12f, 11f  };
     void SetTeamRank(TeamRank[] trls)
     {
         var ls = teamRankContent.GetComponentsInChildren<TeamRankItem>();
-        for (int i = 0; i < trls.Length; i++)
+        var lss = trls.ToList();
+        lss.Sort((a, b) => 
         {
-            var t = ls.ToList().Find(e => { return e.rank == trls[i].rank; });
-            if (t != null) t.SetTeamRank(trls[i]);
+            var at = Utility.ParseEnum<TeamName>(a.team);
+            var bt = Utility.ParseEnum<TeamName>(b.team);
+            var am = a.amount;
+            var bm = b.amount;
+            return am / player[(int)at] > bm / player[(int)bt] ? -1 : 1;
+        });
+        for (int i = 0; i < ls.Length; i++)
+        {
+            ls[i].SetTeamRank(lss[i]);
         }
     }
 

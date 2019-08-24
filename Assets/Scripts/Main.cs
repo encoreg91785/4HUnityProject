@@ -108,6 +108,28 @@ public class Main : MonoBehaviour
                  TaskData t = JsonConvert.DeserializeObject<TaskData>(item.Value.ToString());
                  taskDatas.Add(item.Key, t);
              }
+             List<string> qrs = new List<string>();
+             for (int i = 1; i < 49; i++)
+             {
+                 var qr = "player" + i;
+                 qrs.Add(qr);
+             }
+             ////AllPlayerGetCard("E-1",new List<string>{ "player3"});
+             //AllPlayerGetCard("D-23", qrs);
+             //AllPlayerGetCard("D-22", qrs);
+             //AllPlayerGetCard("D-21", qrs);
+             //AllPlayerGetCard("D-20", qrs);
+             //AllPlayerGetCard("D-19", qrs);
+             //AllPlayerGetCard("D-18", qrs);
+             //AllPlayerGetCard("D-17", qrs);
+             //AllPlayerGetCard("D-16", qrs);
+
+             //DIY結束
+             //AllPlayerGetCard("F-1", qrs);
+             //AllPlayerGetCard("F-2", qrs);
+             //AllPlayerGetCard("F-3", qrs);
+             //AllPlayerGetCard("F-4", qrs);
+             //AllPlayerGetCard("H-9", qrs);
              return Answer.Resolve();
          });
         
@@ -139,6 +161,20 @@ public class Main : MonoBehaviour
         }).Reject(error=> {
             Debug.Log(error);
         });
+    }
+
+    void AllPlayerGetCard(string taskId,List<string> qrls)
+    {
+        
+        new Promise().Then(result =>
+        {
+            UnityWebRequest www = HttpHelper.DoPost("card", new { playerqrcode = qrls, cardid = taskId, from = "All" });
+            return Answer.Resolve(www);
+        }).Then(result =>
+        {
+            Debug.Log("DONE~~~~~");
+            return Answer.Resolve();
+        }).Invoke(this);
     }
 }
 
